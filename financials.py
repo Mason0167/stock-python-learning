@@ -11,8 +11,8 @@ def fetch_financials(ticker):
     # 選你要的欄位
     # income: 營收、NI、每股營收
     income_df = income_df[['date', 'revenue', 'netIncome', 'eps']]
-    # balance: 總資產、SE、總負債
-    balance_df = balance_df[['date', 'totalAssets', 'totalStockholdersEquity', 'totalDebt']]
+    # balance: 總資產、總負債(欠所有對象)、SE、總債務(欠銀行或債主)
+    balance_df = balance_df[['date', 'totalAssets', 'totalLiabilities', 'totalStockholdersEquity']]
     # cashflow: 營業現金流、資本支出
     cashflow_df = cashflow_df[['date', 'operatingCashFlow', 'capitalExpenditure']]
     
