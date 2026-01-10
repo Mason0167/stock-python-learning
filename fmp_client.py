@@ -1,33 +1,57 @@
 # communicate with FMP API
-import requests
+import os, json, requests
 
+# mason74159...
+# API_KEY = "5eke07FPyWg4KUePACwvquplzFZvqBqM"
+# cold...
+# API_KEY = "JJs04hlrp3XP7zBpuGHsrdFA4Sn39bT3"
+# mason...
 API_KEY = "VGgfhNYcvVr6wfqSMEXe2r5vwwut6f86"
 BASE_URL = "https://financialmodelingprep.com/stable"
 
+# Step 1: Fetch profile data to filter by market cap and sector
+def get_profile(symbol: str):
+    # path = f"data_raw/profiles/{symbol}.json"
 
+    # # Return cached JSON if exists
+    # if os.path.exists(path):
+    #     with open(path, "r", encoding="utf-8") as f:
+    #         return json.load(f)
+
+    # Otherwise call API
+    url = f"{BASE_URL}/profile?symbol={symbol}&apikey={API_KEY}"
+    r = requests.get(url)
+    r.raise_for_status()
+    data = r.json()
+
+    # # Save JSON
+    # os.makedirs(os.path.dirname(path), exist_ok=True)
+    # with open(path, "w", encoding="utf-8") as f:
+    #     json.dump(data, f, indent=2)
+
+    return data
+
+'''
+# Step 2
 def get_income_statement(ticker):
     url = f"{BASE_URL}/income-statement?symbol={ticker}&apikey={API_KEY}"
     r = requests.get(url)
     r.raise_for_status()
     return r.json()
 
-
-def get_balance_sheet(ticker):
-    url = f"{BASE_URL}/balance-sheet-statement?symbol={ticker}&apikey={API_KEY}"
-    r = requests.get(url)
-    r.raise_for_status()
-    return r.json()
-
-
 def get_cash_flow(ticker):
     url = f"{BASE_URL}/cash-flow-statement?symbol={ticker}&apikey={API_KEY}"
     r = requests.get(url)
     r.raise_for_status()
     return r.json()
+    '''
+
+# Step 3
+# def get_balance_sheet(ticker):
+#     url = f"{BASE_URL}/balance-sheet-statement?symbol={ticker}&apikey={API_KEY}"
+#     r = requests.get(url)
+#     r.raise_for_status()
+#     return r.json()
 
 
-def get_profile(ticker):
-    url = f"{BASE_URL}/profile?symbol={ticker}&apikey={API_KEY}"
-    r = requests.get(url)
-    r.raise_for_status()
-    return r.json()[0]
+
