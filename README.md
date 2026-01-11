@@ -11,6 +11,7 @@ A Python-based fundamental stock analysis and screening system that helps identi
 4. Export results to Excel.
 5. Format the Excel with openpyxl package.
 6. Create figures with matplotlib package. (Still in progress...)
+7. (More functions to be added)
 
 ## Features
 
@@ -24,3 +25,4 @@ A Python-based fundamental stock analysis and screening system that helps identi
   - Valuation (PE, PB, PSR, PEG)
 - Perform DuPont ROE decomposition
 - Export all results to Excel for analysis
+- (More functions to be added)
