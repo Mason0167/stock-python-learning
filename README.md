@@ -10,7 +10,7 @@ A Python-based fundamental stock analysis and screening system that helps identi
 3. Combine different dataframes or metrics data into a single dataframe.
 4. Export results to Excel.
 5. Format the Excel with openpyxl package.
-6. Create figures with matplotlib package.
+6. Create figures with matplotlib package. (Still in progress...)
 
 ## Features
 
