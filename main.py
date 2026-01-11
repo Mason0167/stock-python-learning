@@ -3,10 +3,11 @@ from financials import *
 from metrics import *
 from export_excel import *
 
-# Step 1
-# 1/10 end_row: 1497
-print("\nFetching the tickers......")
-universe_df = build_universe_step1(start_row=1497, end_row=)
+# Step 1: Filtering by Sector and Market Cap
+# 1/11 end_row: 2243
+print("\nFetching tickers......")
+universe_df = build_universe(input_file="data_raw/nasdaqlisted_filtered.xlsx", 
+                            start_row=2243, end_row=2396)
 
 print("Fetching ticker profiles and cache json ......")
 profiles = []
@@ -20,7 +21,7 @@ for symbol in universe_df["Symbol"]:
             "MarketCap": p["marketCap"]
         })
     
-    profile_df = pd.DataFrame(profiles)
+profile_df = pd.DataFrame(profiles)
 print("\n", profile_df)  
 
 profile_df["MarketCap"] = (profile_df["MarketCap"] / 1e9).round(2)
@@ -31,13 +32,22 @@ filtered = profile_df[
     (profile_df["MarketCap"] >= 3)
 ].copy()
 
+# on="Symbol": Match rows from both tables where the Symbol column is equal.
+# how="inner": Keep rows whose Symbol exists in both tables.
 universe_df = universe_df.merge(filtered, on="Symbol", how="inner")
-export_universe_1(universe_df)
+# index=False: The leftmost column
+universe_df.to_excel("data_clean/universe_step1_backup.xlsx", index=False)
+print("Backup saved")
+
+export_universe(universe_df, 
+                before_format = "data_clean/universe_step1.xlsx",
+                after_format = "data_clean/universe_step1_formatted.xlsx")
 '''
 
-# Step 2
+# Step 2: Net Margin < 0 & FCF_Margin < 0
 print("\nFetching the tickers......")
-universe_df = build_universe_step2(start_row=0, end_row=1)
+universe_df = build_universe(input_file = "data_clean/universe_step1.xlsx",
+                            start_row=0, end_row=1)
 
 results = []
 for symbol in universe_df["Symbol"]:
@@ -71,9 +81,13 @@ if not results:
     exit()
 
 final_df = pd.concat(results, ignore_index=True)
+final_df.to_excel("data_clean/universe_backup.xlsx", index=False)
+print("Backup saved")
 
 print("\nFiltering and formatting......")
-export_universe_2(final_df)
+export_universe(final_df, 
+                before_format = "data_metrics/universe_step2.xlsx",
+                after_format = "data_metrics/universe_step2_formatted.xlsx")
 '''
 
 '''

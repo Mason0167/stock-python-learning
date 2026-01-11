@@ -2,11 +2,14 @@
 import os, json, requests
 
 # mason74...
-API_KEY = "5eke07FPyWg4KUePACwvquplzFZvqBqM"
+# API_KEY = "5eke07FPyWg4KUePACwvquplzFZvqBqM"
+
 # cold...
 # API_KEY = "JJs04hlrp3XP7zBpuGHsrdFA4Sn39bT3"
+
 # mason...
-# API_KEY = "VGgfhNYcvVr6wfqSMEXe2r5vwwut6f86"
+API_KEY = "VGgfhNYcvVr6wfqSMEXe2r5vwwut6f86"
+
 BASE_URL = "https://financialmodelingprep.com/stable"
 
 # Step 1: Fetch profile data to filter by market cap and sector
