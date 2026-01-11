@@ -1,14 +1,14 @@
 from universe import *
-from export_excel import *
 from financials import *
 from metrics import *
+from export_excel import *
 
 # Step 1
-# 1/9 end_row: 749
+# 1/10 end_row: 1497
 print("\nFetching the tickers......")
-universe_df = build_universe_step1(start_row=749, end_row=)
+universe_df = build_universe_step1(start_row=1497, end_row=)
 
-print("\nFetching ticker profiles and cache json ......")
+print("Fetching ticker profiles and cache json ......")
 profiles = []
 for symbol in universe_df["Symbol"]:
     
@@ -21,7 +21,7 @@ for symbol in universe_df["Symbol"]:
         })
     
     profile_df = pd.DataFrame(profiles)
-print(profile_df)  
+print("\n", profile_df)  
 
 profile_df["MarketCap"] = (profile_df["MarketCap"] / 1e9).round(2)
 
@@ -32,26 +32,48 @@ filtered = profile_df[
 ].copy()
 
 universe_df = universe_df.merge(filtered, on="Symbol", how="inner")
-export_universe(universe_df)
-
+export_universe_1(universe_df)
 '''
+
 # Step 2
-# 取財報
-income_df, cashflow_df = fetch_financials(ticker)
-
-# 計算時間序列指標
-fcf_margin_df = calc_fcf_margin(cashflow_df, income_df)
-net_margin_df = calc_net_margin(income_df)
-
-# 合併成一個 DataFrame
-metrics_df = fcf_margin_df.merge(net_margin_df, on="date", how="outer")\
-
 print("\nFetching the tickers......")
-income_df, cashflow_df = build_universe_step2()
+universe_df = build_universe_step2(start_row=0, end_row=1)
+
+results = []
+for symbol in universe_df["Symbol"]:
+    print("Processing: ", symbol)
+    income_df, cashflow_df = fetch_income_cashflow_statement(symbol)
+
+    # Calculate
+    fcf_margin_df = calc_fcf_margin(cashflow_df, income_df)
+    net_margin_df = calc_net_margin(income_df)
+
+    # Join metrics by date
+    metrics_df = fcf_margin_df.merge(net_margin_df, on="date", how="inner")
+
+    # Filter
+    FCF_bad_years = (metrics_df["FCF_Margin"] < 0).sum()
+    if FCF_bad_years >= 3:
+        print("Rejected (FCF Margin)", symbol)
+        continue
+        
+    Net_bad_years = (metrics_df["Net_Margin"] < 0).sum()
+    if Net_bad_years >= 3:
+        print("Rejected (Net Margin)", symbol)
+        continue
+    
+    # Add symbol column for later use
+    metrics_df["Symbol"] = symbol
+    results.append(metrics_df)
+    
+if not results:
+    print("No stocks passed filter")
+    exit()
+
+final_df = pd.concat(results, ignore_index=True)
 
 print("\nFiltering and formatting......")
-export_universe(income_df)
-export_universe(cashflow_df)
+export_universe_2(final_df)
 '''
 
 '''
