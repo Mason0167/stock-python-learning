@@ -1,6 +1,6 @@
 # Stock Selection Engine
 
-A Python-based fundamental stock analysis and screening system that helps identify high-quality, stable companies using different metrics. (For stock learning beginner.)
+A Python practice project for learning fundamental stock analysis and screening. Focuses on experimenting with metrics and identifying high-quality, stable companies, without production use.
 
 ---
 
